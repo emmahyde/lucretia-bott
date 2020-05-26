@@ -1,17 +1,18 @@
 const eris = require('eris')
+// const AWS = require('aws-sdk')
 
 const PREFIX = '!'
 const BOT_OWNER_ID = '254422154295115776'
 const PREMIUM_CUTOFF = 10
 const commandMap = {}
-const token = require('./bot.json')
-
-const bot = new eris.Client(token['token'])
+const token = process.env['LUCRETIA_BOTT_TOKEN']
+const bot = new eris.Client(token)
 const premiumRole = {
   name: 'Premium Member',
   color: 0x6aa84f,
   hoist: true
 }
+
 //
 // commandMap['trivia'] = {
 //   execute: (msg, args) => {
