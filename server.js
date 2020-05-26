@@ -1,31 +1,21 @@
 const Eris = require('eris')
 const { getSecret } = require('./aws-client.js')
 
-const runServer = async () => {
-  try {
-    const secret = await getSecret('lucretia-bott-token')
-    console.log('now thats what i call secret!', { secret })
-    const bot = new Eris.Client(secret)
+const secret = await getSecret('lucretia-bott-token')
+console.log('now thats what i call secret!', { secret })
 
-    const PREFIX = '!'
-    const BOT_OWNER_ID = '254422154295115776'
-    const PREMIUM_CUTOFF = 10
-    const commandMap = {}
+class Bot {
+  constructor() {
+    this.prefix = '!'
+    this.commandMap = {}
+    this.token = null
+  }
 
-    const premiumRole = {
-      name: 'Premium Member',
-      color: 0x6aa84f,
-      hoist: true
-    }
+  async init() {
+    this.token = await getSecret('lucretia-bott-token')
+    this.botClient = new Eris.Client(this.token)
 
-    //
-    // commandMap['trivia'] = {
-    //   execute: (msg, args) => {
-    //
-    //   }
-    // }
-
-    commandMap['addpayment'] = {
+    this.commandMap['addpayment'] = {
       botOwnerOnly: true,
       execute: (msg, args) => {
         const mention = args[0]
@@ -47,29 +37,15 @@ const runServer = async () => {
         }
 
         return Promise.all([
-          msg.channel.createMessage(`${mention} paid $${amount.toFixed(2)}`),
-          updateMemberRoleForDonation(guild, member, amount)
+          msg.channel.createMessage(`${mention} paid $${amount.toFixed(2)}`)
         ])
       }
     }
 
-    async function updateMemberRoleForDonation(guild, member, donationAmount) {
-      if (guild && member && donationAmount >= PREMIUM_CUTOFF) {
-        let role = Array.from(guild.roles.values()).find(
-          (role) => role.name === premiumRole.name
-        )
-        if (!role) {
-          role = await guild.createRole(premiumRole)
-        }
-
-        return member.addRole(role.id, 'Donated $10 or more.')
-      }
-    }
-
-    // command handler, handles 'no matching command' case
-    bot.on('messageCreate', async (msg) => {
+// command handler, handles 'no matching command' case
+    this.botClient.on('messageCreate', async (msg) => {
       const content = msg.content
-      if (!content.startsWith(PREFIX)) {
+      if (!content.startsWith(this.prefix)) {
         return
       }
 
@@ -79,16 +55,9 @@ const runServer = async () => {
         .filter((s) => s)
       const commandName = parts[0].substr(PREFIX.length)
 
-      const command = commandMap[commandName]
+      const command = this.commandMap[commandName]
       if (!command) {
         return
-      }
-
-      const authorIsBotOwner = msg.author.id === BOT_OWNER_ID
-      if (command.botOwnerOnly && !authorIsBotOwner) {
-        return await msg.channel.createMessage(
-          `Hey, fuck you. You are ${msg.author.id}.`
-        )
       }
 
       const args = parts.slice(1)
@@ -101,14 +70,12 @@ const runServer = async () => {
       }
     })
 
-    bot.on('error', (err) => {
+    this.botClient.on('error', (err) => {
       console.warn(err)
     })
 
-    bot.connect()
-  } catch (err) {
-    console.log('uh oh!', { err })
+    this.botClient.connect()
   }
 }
 
-runServer()
+new Bot().init()
