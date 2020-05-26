@@ -1,12 +1,13 @@
-const eris = require('eris')
-// const AWS = require('aws-sdk')
+const Eris = require('eris')
+const awsClient = require('./aws-client.js')
+ // const secret = awsClient.getSecret('lucretia-bott-token').then((password) => { return password })
+const bot = new Eris.Client(token)
 
 const PREFIX = '!'
 const BOT_OWNER_ID = '254422154295115776'
 const PREMIUM_CUTOFF = 10
 const commandMap = {}
-const token = process.env['LUCRETIA_BOTT_TOKEN']
-const bot = new eris.Client(token)
+
 const premiumRole = {
   name: 'Premium Member',
   color: 0x6aa84f,
