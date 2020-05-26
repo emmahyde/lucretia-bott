@@ -1,5 +1,6 @@
 const Eris = require('eris')
 const { getSecret } = require('./aws-client.js')
+const { commandMap } = require('./command-map.js')
 
 const secret = await getSecret('lucretia-bott-token')
 console.log('now thats what i call secret!', { secret })
@@ -7,40 +8,13 @@ console.log('now thats what i call secret!', { secret })
 class Bot {
   constructor() {
     this.prefix = '!'
-    this.commandMap = {}
+    this.commandMap = commandMap
     this.token = null
   }
 
   async init() {
     this.token = await getSecret('lucretia-bott-token')
     this.botClient = new Eris.Client(this.token)
-
-    this.commandMap['addpayment'] = {
-      botOwnerOnly: true,
-      execute: (msg, args) => {
-        const mention = args[0]
-        const amount = parseFloat(args[1])
-        const guild = msg.channel.guild
-        const userId = mention.replace(/<@(.*?)>/, (match, group1) => group1)
-        const member = guild.members.find((member) => {
-          return member.username === userId
-        })
-
-        const userIsInGuild = !!member
-        if (!userIsInGuild) {
-          return msg.channel.createMessage('User not found in this channel.')
-        }
-
-        const amountIsValid = amount && !Number.isNaN(amount)
-        if (!amountIsValid) {
-          return msg.channel.createMessage('Invalid donation amount')
-        }
-
-        return Promise.all([
-          msg.channel.createMessage(`${mention} paid $${amount.toFixed(2)}`)
-        ])
-      }
-    }
 
 // command handler, handles 'no matching command' case
     this.botClient.on('messageCreate', async (msg) => {
@@ -53,7 +27,7 @@ class Bot {
         .split(' ')
         .map((s) => s.trim())
         .filter((s) => s)
-      const commandName = parts[0].substr(PREFIX.length)
+      const commandName = parts[0].substr(this.prefix.length)
 
       const command = this.commandMap[commandName]
       if (!command) {
