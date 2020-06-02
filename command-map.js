@@ -1,6 +1,7 @@
 const commandMap = {}
 commandMap['addpayment'] = {
   botOwnerOnly: true,
+
   execute: (msg, args) => {
     const mention = args[0]
     const amount = parseFloat(args[1])
@@ -26,4 +27,4 @@ commandMap['addpayment'] = {
   }
 }
 
-module.exports = commandMap
+module.exports = { commandMap }

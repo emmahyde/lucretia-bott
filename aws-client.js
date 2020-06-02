@@ -2,14 +2,14 @@ const AWS = require('aws-sdk')
 AWS.config.update({ region: 'us-east-1' })
 const ssm = new AWS.SSM()
 
-const getSecret = async (secretName) => {
-  console.log(`Getting secret for ${secretName}`)
-  const params = {
-    Name: secretName
+async function getParameterStore(name) {
+  try {
+    let data = await ssm.getParameter({ Name: name }).promise()
+    return data.Parameter.Value
   }
-
-  const result = await ssm.getParameter(params).promise()
-  return result.Parameter.Value
+  catch (err) {
+    console.log(err)
+  }
 }
 
-module.exports = { getSecret }
+module.exports = { getParameterStore }
