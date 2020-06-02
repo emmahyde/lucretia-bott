@@ -4,10 +4,9 @@ const ssm = new AWS.SSM()
 
 async function getParameterStore(name) {
   try {
-    let data = await ssm.getParameter({ Name: name }).promise()
+    const data = await ssm.getParameter({ Name: name }).promise()
     return data.Parameter.Value
-  }
-  catch (err) {
+  } catch (err) {
     console.log(err)
   }
 }
