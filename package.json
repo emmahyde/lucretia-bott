@@ -16,7 +16,7 @@
   "scripts": {
     "start": "node ./node_modules/pm2/bin/pm2 start ./server.js --name lucretia-bott --log ../logs/app.log",
     "stop": "node ./node_modules/pm2/bin/pm2 stop lucretia-bott",
-    "pm2": "node ./node_modules/pm2/bin/pm2",
+    "show": "node ./node_modules/pm2/bin/pm2 list",
     "build": "echo 'Building...'",
     "prettify": "prettier --config .prettierrc -c ./*.js"
   },
