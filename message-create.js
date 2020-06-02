@@ -4,7 +4,7 @@ const prefix = '!'
 async function messageCreate(msg) {
   const { content } = msg
   if (head(content) !== prefix) {
-    throw new Error('GIVE ME THE PREFIX')
+    return
   }
 
   const parts = compose(map(trim), split(' '))(content)
