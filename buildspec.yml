@@ -22,4 +22,5 @@ artifacts:
     - server.js
     - package.json
     - appspec.yml
+    - 'lib/**/*'
     - 'node_modules/**/*'

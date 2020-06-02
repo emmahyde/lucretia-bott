@@ -1,7 +1,6 @@
 node_modules
 .idea
 env.sh
-lucretia-bott-token
 bot.js.old
 .DS_Store
 tlog

@@ -1,7 +1,7 @@
 const Eris = require('eris')
 
-const { getParameterStore } = require('./aws-client.js')
-const { messageCreate } = require('./message-create.js')
+const { getParameterStore } = require('./lib/aws-client.js')
+const { messageCreate } = require('./lib/message-create.js')
 
 async function resolveClient() {
   const token = await getParameterStore('lucretia-bott-token')

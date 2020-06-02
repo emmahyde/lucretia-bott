@@ -57,6 +57,7 @@ Resources:
           Action: sts:AssumeRole
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/CloudWatchFullAccess
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
         - arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforAWSCodeDeploy
       Tags:
         - Key: Name
@@ -80,12 +81,18 @@ Resources:
               ruby: []
               wget: []
           files:
-            /home/ec2-user/install:
+            /home/ec2-user/agents/install-cd:
               source: !Sub "https://aws-codedeploy-${AWS::Region}.s3.amazonaws.com/latest/install"
+              mode: "000755"
+            /home/ec2-user/agents/install-cw:
+              source: !Sub "https://s3.${AWS::Region}.amazonaws.com/amazoncloudwatch-agent-${AWS::Region}/amazon_linux/amd64/latest/amazon-cloudwatch-agent.rpm"
               mode: "000755"
           commands:
             00-install-cd-agent:
-              command: "./install auto"
+              command: "./agents/install-cd auto"
+              cwd: "/home/ec2-user/"
+            01-install-cw-agent:
+              command: "sudo rpm -U ./agents/install-cw"
               cwd: "/home/ec2-user/"
     Properties:
       ImageId: !Ref EC2AMI
@@ -163,10 +170,6 @@ Resources:
         Type: LINUX_CONTAINER
         ComputeType: BUILD_GENERAL1_SMALL
         Image: aws/codebuild/standard:2.0
-        EnvironmentVariable:
-          - Name: "LUCRETIA_BOTT_TOKEN"
-            Type: String
-            Value: !Ref LucretiaBottToken
       Source:
         Type: CODEPIPELINE
   DeploymentApplication:
