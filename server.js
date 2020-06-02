@@ -7,13 +7,13 @@ let client = null
 
 function resolveClient() {
   getParameterStore('lucretia-bott-token')
-    .then(result => {
+    .then((result) => {
       console.log(result)
       token = result
       client = new Eris.Client(token)
       botSetup(client)
     })
-    .catch(err => console.log(err))
+    .catch((err) => console.log(err))
 }
 function botSetup(client) {
   client.on('messageCreate', async (msg) => {
