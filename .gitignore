@@ -3,3 +3,5 @@ node_modules
 env.sh
 lucretia-bott-token
 bot.js.old
+.DS_Store
+tlog
