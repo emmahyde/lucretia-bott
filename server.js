@@ -1,7 +1,6 @@
 const Eris = require('eris')
 
 const { getParameterStore } = require('./aws-client.js')
-const { commandMap } = require('./command-map.js')
 const { messageCreate } = require('./message-create.js')
 
 async function resolveClient() {

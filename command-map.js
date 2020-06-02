@@ -25,6 +25,11 @@ const commandMap = {
         msg.channel.createMessage(`${mention} paid $${amount.toFixed(2)}`)
       ])
     }
+  },
+  petkitty: {
+    execute: (msg) => {
+      return msg.channel.createMessage(`You pet the kitty :3 Nice job!`)
+    }
   }
 }
 

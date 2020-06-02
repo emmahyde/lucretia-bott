@@ -1,4 +1,5 @@
 const { head, compose, map, trim, split, replace, tail } = require('ramda')
+const { commandMap } = require('./command-map.js')
 const prefix = '!'
 
 async function messageCreate(msg) {
