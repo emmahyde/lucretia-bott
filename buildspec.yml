@@ -11,6 +11,10 @@ phases:
   build:
     commands:
       - npm run build
+  post_build:
+    run_as: ec2-user
+    commands:
+      - npm start
 artifacts:
   files:
     - start-service.sh
