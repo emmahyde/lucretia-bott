@@ -117,17 +117,6 @@ Resources:
           # Get latest cfn scripts; https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/bestpractices.html#cfninit
           yum install -y aws-cfn-bootstrap
 
-          echo 'installing redis...'
-          wget http://download.redis.io/redis-stable.tar.gz
-          tar xvzf redis-stable.tar.gz
-          rm -f redis-stable.tar.gz
-          cd redis-stable
-          make distclean
-          make
-          yum install -y tcl
-          cp src/redis-server /usr/local/bin/
-          cp src/redis-cli /usr/local/bin/
-
           echo 'writing install script...'
           cat > /tmp/install_script.sh << EOF
             # START
@@ -153,17 +142,31 @@ Resources:
           chown ec2-user:ec2-user /tmp/install_script.sh && chmod a+x /tmp/install_script.sh
           sleep 1; su - ec2-user -c "/tmp/install_script.sh"
 
+          echo 'installing redis...'
+          wget http://download.redis.io/redis-stable.tar.gz
+          tar xvzf redis-stable.tar.gz
+          rm -f redis-stable.tar.gz
+          cd redis-stable
+          make distclean
+          make
+          yum install -y tcl
+          cp src/redis-server /usr/local/bin/
+          cp src/redis-cli /usr/local/bin/
+
           echo 'running cfn-init metadata file + package install...'
           # Have CloudFormation install any files and packages from the metadata
           /opt/aws/bin/cfn-init -v --stack ${AWS::StackName} --region ${AWS::Region} --resource Instance
 
-          echo 'downloading cloudwatch config from s3...'
+          echo 'downloading cloudwatch configs...'
+          echo 'directory: $(pwd)'
           # download cloudwatch config from s3
           aws s3api get-object --bucket lucretia-bott-config --key amazon-cloudwatch-agent.json /home/ec2-user/agents/amazon-cloudwatch-agent.json
+          wget https://s3.amazonaws.com/aws-codedeploy-us-east-1/cloudwatch/codedeploy_logs.conf -P /home/ec2-user/agents
 
           echo 'initializing cloudwatch...'
           # setup cloudwatch with config
           /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/home/ec2-user/agents/amazon-cloudwatch-agent.json -s
+          /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a append-config -m ec2 -c file:/home/ec2-user/agents/codedeploy_logs.conf -s
 
           echo 'signaling instance is ready...'
           # Signal to CloudFormation that the instance is ready
