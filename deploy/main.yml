@@ -105,7 +105,6 @@ Resources:
         Fn::Base64: !Sub |
           #!/bin/bash -xe
 
-          echo 'beginning userdata script...'
           # send script output to /tmp so we can debug boot failures
           exec > /tmp/userdata.log 2>&1
 
@@ -189,6 +188,7 @@ Resources:
           Action: sts:AssumeRole
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/PowerUserAccess
+        - arn:aws:iam::aws:policy/CloudWatchFullAccess
   BuildProject:
     Type: AWS::CodeBuild::Project
     Properties:
