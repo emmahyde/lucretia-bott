@@ -6,6 +6,7 @@ phases:
       nodejs: 10
   pre_build:
     commands:
+      - echo "CODEBUILD_SRC_DIR -> $CODEBUILD_SRC_DIR"
       # run 'npm install' using versions in package-lock.json
       - npm ci
   build:
@@ -17,11 +18,11 @@ phases:
       - npm start
 artifacts:
   files:
-    - start-service.sh
-    - stop-service.sh
-    - server.js
-    - package.json
-    - appspec.yml
+    - 'server.js'
+    - 'package.json'
+    - 'appspec.yml'
     - 'lib/**/*'
     - 'node_modules/**/*'
+    - 'start-service.sh'
+    - 'stop-service.sh'
     - 'deploy/config/*'
