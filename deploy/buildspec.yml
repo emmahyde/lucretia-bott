@@ -18,11 +18,8 @@ phases:
       - npm start
 artifacts:
   files:
-    - start-service.sh
-    - stop-service.sh
+    - 'deploy/**/*'
     - server.js
     - package.json
-    - appspec.yml
     - 'lib/**/*'
     - 'node_modules/**/*'
-    - 'deploy/config/*'

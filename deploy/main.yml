@@ -23,9 +23,6 @@ Parameters:
     Type: String
     NoEcho: true
     Description: 'A GitHub personal access token with "repo" and "admin:repo_hook" permissions.'
-  LucretiaBottToken:
-    Type: String
-    Description: 'lucretia-bott token.'
 
 Resources:
   SecurityGroup:
