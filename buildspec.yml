@@ -18,8 +18,9 @@ phases:
       - npm start
 artifacts:
   files:
-    - 'deploy/**/*'
+    - buildspec.yml
     - server.js
     - package.json
+    - 'deploy/**/*'
     - 'lib/**/*'
     - 'node_modules/**/*'
