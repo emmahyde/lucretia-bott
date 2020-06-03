@@ -105,15 +105,19 @@ Resources:
         Fn::Base64: !Sub |
           #!/bin/bash -xe
 
+          echo 'beginning userdata script...'
           # send script output to /tmp so we can debug boot failures
           exec > /tmp/userdata.log 2>&1
 
+          echo 'running yum update...'
           # Update all packages
           yum -y update
 
+          echo 'getting latest cfn scripts...'
           # Get latest cfn scripts; https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/bestpractices.html#cfninit
           yum install -y aws-cfn-bootstrap
 
+          echo 'installing redis...'
           wget http://download.redis.io/redis-stable.tar.gz
           tar xvzf redis-stable.tar.gz
           rm -f redis-stable.tar.gz
@@ -121,11 +125,14 @@ Resources:
           make distclean
           make
           yum install -y tcl
+          cp src/redis-server /usr/local/bin/
+          cp src/redis-cli /usr/local/bin/
 
+          echo 'writing install script...'
           cat > /tmp/install_script.sh << EOF
             # START
 
-            echo "Setting up NodeJS Environment"
+            echo "Setting up NodeJS Environment..."
             curl https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
 
             # Dot source the files to ensure that variables are available within the current shell
@@ -139,20 +146,26 @@ Resources:
 
             # Create log directory
             mkdir -p /home/ec2-user/app/logs
+            echo "environment setup complete. exiting install_script..."
           EOF
 
+          echo 'running install_script...'
           chown ec2-user:ec2-user /tmp/install_script.sh && chmod a+x /tmp/install_script.sh
           sleep 1; su - ec2-user -c "/tmp/install_script.sh"
 
+          echo 'running cfn-init metadata file + package install...'
           # Have CloudFormation install any files and packages from the metadata
           /opt/aws/bin/cfn-init -v --stack ${AWS::StackName} --region ${AWS::Region} --resource Instance
 
+          echo 'downloading cloudwatch config from s3...'
           # download cloudwatch config from s3
           aws s3api get-object --bucket lucretia-bott-config --key amazon-cloudwatch-agent.json /home/ec2-user/agents/amazon-cloudwatch-agent.json
 
+          echo 'initializing cloudwatch...'
           # setup cloudwatch with config
           /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/home/ec2-user/agents/amazon-cloudwatch-agent.json -s
 
+          echo 'signaling instance is ready...'
           # Signal to CloudFormation that the instance is ready
           /opt/aws/bin/cfn-signal -e $? --stack ${AWS::StackName} --region ${AWS::Region} --resource Instance
       Tags:
