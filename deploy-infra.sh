@@ -11,7 +11,6 @@ GH_ACCESS_TOKEN=$(cat ~/.github/lucretia-bott-access-token)
 GH_OWNER=$(cat ~/.github/lucretia-bott-owner)
 GH_REPO=$(cat ~/.github/lucretia-bott-repo)
 GH_BRANCH=master
-LUCRETIA_BOTT_TOKEN=$(cat ./lucretia-bott-token)
 
 # Deploys static resources
 echo -e "\n\n=========== Deploying setup.yml ==========="
@@ -40,7 +39,6 @@ aws cloudformation deploy \
     GitHubRepo=$GH_REPO \
     GitHubBranch=$GH_BRANCH \
     GitHubPersonalAccessToken=$GH_ACCESS_TOKEN \
-    LucretiaBottToken=$LUCRETIA_BOTT_TOKEN \
     CodePipelineBucket=$CODEPIPELINE_BUCKET
 
 

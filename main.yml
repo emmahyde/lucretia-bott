@@ -140,8 +140,8 @@ Resources:
           /opt/aws/bin/cfn-init -v --stack ${AWS::StackName} --region ${AWS::Region} --resource Instance
 
           # Install CloudWatch agent
-          # aws s3api get-object --bucket lucretia-bott-config --key amazon-cloudwatch-agent.json /agents/amazon-cloudwatch-agent.json
-          # /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/home/ec2-user/agents/amazon-cloudwatch-agent.json -s
+          aws s3api get-object --bucket lucretia-bott-config --key amazon-cloudwatch-agent.json /home/ec2-user/agents/amazon-cloudwatch-agent.json
+          /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/home/ec2-user/agents/amazon-cloudwatch-agent.json -s
 
           # Signal to CloudFormation that the instance is ready
           /opt/aws/bin/cfn-signal -e $? --stack ${AWS::StackName} --region ${AWS::Region} --resource Instance
