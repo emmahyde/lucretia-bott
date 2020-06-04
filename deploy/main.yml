@@ -77,9 +77,6 @@ Resources:
             yum:
               ruby: []
               wget: []
-              tar: []
-              gcc: []
-              make: []
           files:
             /home/ec2-user/agents/install-cd:
               source: !Sub "https://aws-codedeploy-${AWS::Region}.s3.amazonaws.com/latest/install"
@@ -111,6 +108,7 @@ Resources:
           echo 'running yum update...'
           # Update all packages
           yum -y update
+          # yum -y install gcc make tar
 
           echo 'getting latest cfn scripts...'
           # Get latest cfn scripts; https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/bestpractices.html#cfninit
@@ -141,16 +139,16 @@ Resources:
           chown ec2-user:ec2-user /tmp/install_script.sh && chmod a+x /tmp/install_script.sh
           sleep 1; su - ec2-user -c "/tmp/install_script.sh"
 
-          echo 'installing redis...'
-          wget http://download.redis.io/redis-stable.tar.gz
-          tar xvzf redis-stable.tar.gz
-          rm -f redis-stable.tar.gz
-          cd redis-stable
-          make distclean
-          make
-          yum install -y tcl
-          cp src/redis-server /usr/local/bin/
-          cp src/redis-cli /usr/local/bin/
+          #          echo 'installing redis...'
+          #          wget http://download.redis.io/redis-stable.tar.gz
+          #          tar xvzf redis-stable.tar.gz
+          #          rm -f redis-stable.tar.gz
+          #          cd redis-stable
+          #          make distclean
+          #          make
+          #          yum install -y tcl
+          #          cp src/redis-server /usr/local/bin/
+          #          cp src/redis-cli /usr/local/bin/
 
           echo 'running cfn-init metadata file + package install...'
           # Have CloudFormation install any files and packages from the metadata
