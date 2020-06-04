@@ -98,6 +98,7 @@ Resources:
       Monitoring: true
       SecurityGroupIds:
         - !GetAtt SecurityGroup.GroupId
+      KeyName: 'lucretia-bott-key-pair'
       UserData:
         Fn::Base64: !Sub |
           #!/bin/bash -xe
