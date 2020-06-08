@@ -8,6 +8,7 @@ phases:
     commands:
       # run 'npm install' using versions in package-lock.json
       - npm ci
+      - ln -s ./node_modules/pm2/bin/pm2 /usr/bin
   build:
     commands:
       - npm run build

@@ -84,6 +84,9 @@ Resources:
             /home/ec2-user/agents/install-cw:
               source: !Sub "https://s3.${AWS::Region}.amazonaws.com/amazoncloudwatch-agent-${AWS::Region}/amazon_linux/amd64/latest/amazon-cloudwatch-agent.rpm"
               mode: "000755"
+            /home/ec2-user/redis/redis-stable.tar.gz:
+              source: !Sub "http://download.redis.io/redis-stable.tar.gz"
+              mode: "000755"
           commands:
             00-install-cd-agent:
               command: "./agents/install-cd auto"
@@ -91,6 +94,8 @@ Resources:
             01-install-cw-agent:
               command: "sudo rpm -U ./agents/install-cw"
               cwd: "/home/ec2-user/"
+            02-setup-redis-resource:
+              command: "tar xvzf home/ec2-user/redis/redis-stable.tar.gz; rm -f home/ec2-user/redis/redis-stable.tar.gz"
     Properties:
       ImageId: !Ref EC2AMI
       InstanceType: !Ref EC2InstanceType
@@ -108,10 +113,7 @@ Resources:
 
           echo 'running yum update...'
           yum -y update
-          yum install -y gcc make tar tcl
-
-          echo 'getting latest cfn scripts...'
-          yum install -y aws-cfn-bootstrap
+          yum install -y gcc make tar tcl aws-cfn-bootstrap
 
           echo 'writing install script...'
           cat > /tmp/install_script.sh << EOF
@@ -138,16 +140,12 @@ Resources:
           chown ec2-user:ec2-user /tmp/install_script.sh && chmod a+x /tmp/install_script.sh
           sleep 1; su - ec2-user -c "/tmp/install_script.sh"
 
-          #          echo 'installing redis...'
-          #          wget http://download.redis.io/redis-stable.tar.gz
-          #          tar xvzf redis-stable.tar.gz
-          #          rm -f redis-stable.tar.gz
+          echo 'installing redis...'
           #          cd redis-stable
           #          make distclean
           #          make
-          #          yum install -y tcl
-          #          cp src/redis-server /usr/local/bin/
-          #          cp src/redis-cli /usr/local/bin/
+          #          cp src/redis-server /usr/bin
+          #          cp src/redis-cli /usr/bin
 
           echo 'running cfn-init metadata file + package install...'
           /opt/aws/bin/cfn-init -v --stack ${AWS::StackName} --region ${AWS::Region} --resource Instance
