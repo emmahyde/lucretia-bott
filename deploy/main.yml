@@ -77,6 +77,7 @@ Resources:
             yum:
               ruby: []
               wget: []
+              tar: []
           files:
             /home/ec2-user/agents/install-cd:
               source: !Sub "https://aws-codedeploy-${AWS::Region}.s3.amazonaws.com/latest/install"
@@ -95,7 +96,8 @@ Resources:
               command: "sudo rpm -U ./agents/install-cw"
               cwd: "/home/ec2-user/"
             02-setup-redis-resource:
-              command: "tar xvzf home/ec2-user/redis/redis-stable.tar.gz; rm -f home/ec2-user/redis/redis-stable.tar.gz"
+              command: "sudo tar xvzf ./redis/redis-stable.tar.gz"
+              cwd: "/home/ec2-user/"
     Properties:
       ImageId: !Ref EC2AMI
       InstanceType: !Ref EC2InstanceType
@@ -113,7 +115,7 @@ Resources:
 
           echo 'running yum update...'
           yum -y update
-          yum install -y gcc make tar tcl aws-cfn-bootstrap
+          yum install -y gcc make tcl aws-cfn-bootstrap
 
           echo 'writing install script...'
           cat > /tmp/install_script.sh << EOF

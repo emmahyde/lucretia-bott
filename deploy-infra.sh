@@ -2,14 +2,15 @@
 STACK_NAME=lucretia-bott
 REGION=us-east-1 
 CLI_PROFILE=admin-emmajhyde
+GH_ACCESS_TOKEN=$(cat ~/.github/lucretia-bott-access-token)
+GH_OWNER=$(cat ~/.github/lucretia-bott-owner)
+GH_REPO=$(cat ~/.github/lucretia-bott-repo)
 EC2_INSTANCE_TYPE=t2.micro
 AWS_ACCOUNT_ID=`aws sts get-caller-identity --profile admin-emmajhyde --query "Account" --output text`
 CODEPIPELINE_BUCKET="$STACK_NAME-$REGION-codepipeline-$AWS_ACCOUNT_ID"
 # Generate a personal access token with repo and admin:repo_hook
 # permissions from https://github.com/settings/tokens
-GH_ACCESS_TOKEN=$(cat ~/.github/lucretia-bott-access-token)
-GH_OWNER=$(cat ~/.github/lucretia-bott-owner)
-GH_REPO=$(cat ~/.github/lucretia-bott-repo)
+
 GH_BRANCH=master
 
 # Deploys static resources
