@@ -117,13 +117,6 @@ Resources:
           yum -y update
           yum install -y gcc make tcl aws-cfn-bootstrap
 
-          echo 'installing redis...'
-          make -C /home/ec2-user/redis-stable/ distclean
-          make -C /home/ec2-user/redis-stable/
-          #          cp /home/ec2-user/redis-stable/src/redis-server /usr/local/bin
-          #          cp /home/ec2-user/redis-stable/src/redis-cli /usr/local/bin
-          #          echo "export PATH=/usr/local/bin:$PATH" >> /home/ec2-user/.bashrc
-
           echo 'writing install script...'
           cat > /tmp/install_script.sh << EOF
             # START
@@ -151,6 +144,12 @@ Resources:
 
           echo 'running cfn-init metadata file + package install...'
           /opt/aws/bin/cfn-init -v --stack ${AWS::StackName} --region ${AWS::Region} --resource Instance
+
+          echo 'installing redis...'
+          make -C /home/ec2-user/redis-stable/ distclean
+          make -C /home/ec2-user/redis-stable/
+          cp /home/ec2-user/redis-stable/src/redis-server /usr/local/bin
+          cp /home/ec2-user/redis-stable/src/redis-cli /usr/local/bin
 
           echo 'downloading cloudwatch configs...'
           echo 'directory: $(pwd)'
