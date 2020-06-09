@@ -148,16 +148,18 @@ Resources:
           echo 'installing redis...'
           mkdir /etc/redis
           mkdir -p /var/redis/6379
-          cp /home/ec2-user/redis-stable/utils/redis_init_script /etc/init.d/redis_6379
-          cp redis.conf /etc/redis/6379.conf
           make -C /home/ec2-user/redis-stable/ distclean
           make -C /home/ec2-user/redis-stable/
+          cp /home/ec2-user/redis-stable/utils/redis_init_script /etc/init.d/redis_6379
           cp /home/ec2-user/redis-stable/src/redis-server /usr/local/bin
           cp /home/ec2-user/redis-stable/src/redis-cli /usr/local/bin
 
           echo 'downloading cloudwatch configs...'
           echo 'directory: $(pwd)'
           aws s3api get-object --bucket lucretia-bott-config --key amazon-cloudwatch-agent.json /home/ec2-user/agents/amazon-cloudwatch-agent.json
+          aws s3api get-object --bucket lucretia-bott-config --key redis.conf /etc/redis/6379.conf
+          chkconfig redis_6379 on
+          /etc/init.d/redis_6379 start
 
           echo 'initializing cloudwatch...'
           /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/home/ec2-user/agents/amazon-cloudwatch-agent.json -s

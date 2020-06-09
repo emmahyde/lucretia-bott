@@ -5,3 +5,5 @@ bot.js.old
 .DS_Store
 tlog
 lucretia-bott-key-pair.pem
+redis-stable
+redis.conf
