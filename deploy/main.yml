@@ -159,7 +159,6 @@ Resources:
           aws s3api get-object --bucket lucretia-bott-config --key amazon-cloudwatch-agent.json /home/ec2-user/agents/amazon-cloudwatch-agent.json
           aws s3api get-object --bucket lucretia-bott-config --key redis.conf /etc/redis/6379.conf
           chkconfig redis_6379 on
-          /etc/init.d/redis_6379 start
 
           echo 'initializing cloudwatch...'
           /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/home/ec2-user/agents/amazon-cloudwatch-agent.json -s
