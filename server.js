@@ -11,6 +11,10 @@ async function resolveClient() {
   client.on('error', console.warn)
 
   client.connect()
+  // await client.connect()
+  // return client
 }
 
 resolveClient()
+// const ErisClient = resolveClient()
+// module.exports = ErisClient
