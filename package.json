@@ -14,7 +14,7 @@
   "homepage": "https://github.com/emmajhyde/lucretia-bott#readme",
   "main": "server.js",
   "scripts": {
-    "start": "node ./node_modules/pm2/bin/pm2 start ./server.js --name lucretia-bott --log ../logs/app.log",
+    "start": "NODE_DEBUG=redis node ./node_modules/pm2/bin/pm2 start ./server.js --name lucretia-bott --log ../logs/app.log",
     "stop": "node ./node_modules/pm2/bin/pm2 stop lucretia-bott",
     "show": "node ./node_modules/pm2/bin/pm2 list",
     "build": "echo 'Building...'",

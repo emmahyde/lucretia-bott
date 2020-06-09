@@ -6,9 +6,9 @@ phases:
       nodejs: 10
   pre_build:
     commands:
-      - ln -s ./node_modules/pm2/bin/pm2 /usr/bin
       # run 'npm install' using versions in package-lock.json
       - npm ci
+      - ln -s ./node_modules/pm2/bin/pm2 /usr/bin
   build:
     commands:
       - npm run build
