@@ -146,6 +146,10 @@ Resources:
           /opt/aws/bin/cfn-init -v --stack ${AWS::StackName} --region ${AWS::Region} --resource Instance
 
           echo 'installing redis...'
+          mkdir /etc/redis
+          mkdir -p /var/redis/6379
+          cp /home/ec2-user/redis-stable/utils/redis_init_script /etc/init.d/redis_6379
+          cp redis.conf /etc/redis/6379.conf
           make -C /home/ec2-user/redis-stable/ distclean
           make -C /home/ec2-user/redis-stable/
           cp /home/ec2-user/redis-stable/src/redis-server /usr/local/bin
