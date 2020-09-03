@@ -7,3 +7,4 @@ tlog
 lucretia-bott-key-pair.pem
 redis-stable
 redis.conf
+local-token.js
