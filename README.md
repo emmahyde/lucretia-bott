@@ -63,7 +63,7 @@ DISCORD_TOKEN=<your-token>
 
 1. Install local dependencies by running `npm install` from the root directory of your cloned repo
 
-1. Start up a redis instance by running `redis-server` 
+1. Start up a redis instance by running `redis-server` (make sure you have redis installed, which you can do by running `brew install redis`)
 
 1. When you're prepared, you may type `node .` into your bash console at the root directory in order to launch the app in non-detatched local-dev mode. Congrats, your bot should now be online! You may debug and test with effervescence and beauty. 
 
