@@ -1,5 +1,6 @@
 # Lucretia Bott
 This bot is based respectfully on the likeness of Lucretia Mott: https://en.wikipedia.org/wiki/Lucretia_Mott
+
 All personality traits are purely fictional.
 
 # Local Development 
@@ -40,7 +41,7 @@ https://discord.com/developers/applications
   const token = 'your-token' // await getParameterStore('lucretia-bott-token')
 ```
 
-So that you are hardcoding the token you just copied from the Dev Portal instead of retrieving a token from AWS.
+  So that you are hardcoding the token you just copied from the Dev Portal instead of retrieving a token from AWS.
 
 1. When you're prepared, you may type `node .` into your bash console at the root directory in order to launch the app in non-detatched local-dev mode. Congrats, your bot should now be online! You may debug and test with effervescence and beauty. 
 
