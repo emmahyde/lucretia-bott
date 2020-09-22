@@ -13,7 +13,9 @@ https://discord.com/developers/applications
 
 1. Click "New Application" and give your test bot a name. You will be taken to the General Information panel for that Application.
 
-1. Click OAuth2 in the sidebar. Under OAuth2 URL Generator > Scopes, click "bot" in the middle column.
+1. Go to "Bot" in the sidebar. Click "Add A Bot", and approve the application as a bot.
+
+1. Go to "OAuth2" in the sidebar. Under OAuth2 URL Generator > Scopes, click "bot" in the middle column.
 
 1. Give Lucretia the Permissions in the Bot Permissions panel she needs to function. For a test server and a test account, it's ok to give her administrator access, but for the record, here are the permissions used by Lucretia in "production":
 
@@ -45,6 +47,16 @@ https://discord.com/developers/applications
 
 **Don't ever push this change**. If you do by accident, regenerate your token for security purposes. 
 
-1. When you're prepared, you may type `node .` into your bash console at the root directory in order to launch the app in non-detatched local-dev mode. Congrats, your bot should now be online! You may debug and test with effervescence and beauty. 
+1. If you do not have redis installed on your local machine, you will need to install and start a redis server: 
+
+```bash
+	brew install redis 
+	redis-server
+	# to check redis connection, you may run: 
+	redis-cli ping
+	# expected response if working: => PONG
+```
+
+1. When you're prepared, you may `npm install` and `node .` into your bash console at the root directory in order to launch the app in non-detatched local-dev mode. Congrats, your bot should now be online! You may debug and test with effervescence and beauty. 
 
 1. When making changes, please open a PR against `master` on a branch and send to / tag Emma Hyde for approval and merge.
