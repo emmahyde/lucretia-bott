@@ -47,6 +47,16 @@ https://discord.com/developers/applications
 
 **Don't ever push this change**. If you do by accident, regenerate your token for security purposes. 
 
-1. When you're prepared, you may type `node .` into your bash console at the root directory in order to launch the app in non-detatched local-dev mode. Congrats, your bot should now be online! You may debug and test with effervescence and beauty. 
+1. If you do not have redis installed on your local machine, you will need to install and start a redis server: 
+
+```bash
+	brew install redis 
+	redis-server
+	# to check redis connection, you may run: 
+	redis-cli ping
+	# expected response if working: => PONG
+```
+
+1. When you're prepared, you may `npm install` and `node .` into your bash console at the root directory in order to launch the app in non-detatched local-dev mode. Congrats, your bot should now be online! You may debug and test with effervescence and beauty. 
 
 1. When making changes, please open a PR against `master` on a branch and send to / tag Emma Hyde for approval and merge.
