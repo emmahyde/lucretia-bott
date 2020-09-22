@@ -6,6 +6,8 @@ All personality traits are purely fictional.
 # Local Development 
 In order to develop locally for Lucretia:
 
+## Configure Discord
+
 1. Create a Test Server in Discord you intend to invite the Test Bot to.
 
 1. Access the Discord Developer Portal.
@@ -35,13 +37,33 @@ https://discord.com/developers/applications
 
 1. Okay! Now you have an Offline Test Bot in your Test Server. To get it online, you need to navigate to the Bot panel in Discord Developer Portal.
 
+## Authentication, option 1
+
 1. Under Build-A-Bot, click to reveal the token, the copy the token. Go to server.js under the root directory of your cloned repo. Change the following line, as of writing this it is on line 8:
 
 ```js
-  const token = 'your-token' // await getParameterStore('lucretia-bott-token')
+  const token = 'your-token' // LOCAL ? DISCORD_TOKEN : await getParameterStore('lucretia-bott-token')
 ```
 
   So that you are hardcoding the token you just copied from the Dev Portal instead of retrieving a token from AWS.
+
+## Authentication, option 2
+
+1. Under Build-A-Bot, click to reveal the token, the copy the token.
+
+1. Create a .env file by typing this into your terminal from the root directory of your cloned repo: `touch .env`
+
+1. Go into your new `.env` file and add this, replacing `<your-token>` with the token you copied: 
+```
+LOCAL=true
+DISCORD_TOKEN=<your-token>
+```
+
+## Start the bot 
+
+1. Install local dependencies by running `npm install` from the root directory of your cloned repo
+
+1. Start up a redis instance by running `redis-server` 
 
 1. When you're prepared, you may type `node .` into your bash console at the root directory in order to launch the app in non-detatched local-dev mode. Congrats, your bot should now be online! You may debug and test with effervescence and beauty. 
 
