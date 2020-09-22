@@ -37,20 +37,9 @@ https://discord.com/developers/applications
 
 1. Copy the Link provided in the Scopes panel and paste it into your browser, and invite + approve the bot to the Test Server you created earlier.
 
-
 1. Okay! Now you have an Offline Test Bot in your Test Server. To get it online, you need to navigate to the Bot panel in Discord Developer Portal.
 
-## Authentication, option 1
-
-1. Under Build-A-Bot, click to reveal the token, the copy the token. Go to server.js under the root directory of your cloned repo. Change the following line, as of writing this it is on line 8:
-    ```js
-      const token = 'your-token' // LOCAL ? DISCORD_TOKEN : await getParameterStore('lucretia-bott-token')
-    ```
-	So that you are hardcoding the token you just copied from the Dev Portal instead of retrieving a token from AWS.
-	**Don't ever push this change**. If you do by accident, regenerate your token for security purposes. 
-
-
-## Authentication, option 2
+## Authentication
 
 1. Under Build-A-Bot, click to reveal the token, the copy the token.
 
@@ -67,13 +56,66 @@ https://discord.com/developers/applications
 1. If you do not have redis installed on your local machine, you will need to install and start a redis server: 
 
 	```bash
-	  brew install redis 
-	  redis-server
-	# to check redis connection, you may run: 
-	  redis-cli ping
-	# expected response if working: => PONG
+	brew install redis 
+	redis-server
+	  # to check redis connection, you may run: 
+	redis-cli ping
+	  # expected response if working: => PONG
 	```
 
 1. When you're prepared, you may `npm install` and `node .` into your bash console at the root directory in order to launch the app in non-detatched local-dev mode. Congrats, your bot should now be online! You may debug and test with effervescence and beauty. 
 
-1. When making changes, please open a PR against `master` on a branch and send to / tag Emma Hyde for approval and merge.
+1. Add any new commands to the `help` command in `command-map.js`. When making changes, please open a PR against `master` on a branch and send to / tag Emma Hyde for approval and merge.
+
+# Documentation
+This bot uses the Eris.js framework in order to communicate with Discord (send messages, read messages, etc.)
+
+**Helpful Links:**
+- Primary Documentation:
+  - Eris: https://abal.moe/Eris/docs/getting-started
+	- Most Helpful Classes:
+  		- Guild (This is the original word used by discord for Server): https://abal.moe/Eris/docs/Guild
+  		- Message: https://abal.moe/Eris/docs/Message
+  		- Channel: https://abal.moe/Eris/docs/Channel
+  		- Member: https://abal.moe/Eris/docs/Member
+		- User: https://abal.moe/Eris/docs/User
+  		- Role: https://abal.moe/Eris/docs/Role
+  - Redis: https://redis.io/documentation
+  - AsyncRedis (JS Client): https://openbase.io/js/async-redis/documentation
+
+# Examples
+When working to add a command in `lib/command-map.js`, the primary element we're working with is the message that triggered the command to fire. Let's use `petkitty` as an example, it is quite simple. When a member of a channel writes `!petkitty`, we enter the asynchronous execute function defined there.
+
+## Params
+```
+{msg, args} =>
+	msg: Eris Message Object 
+	args: Array[String] of message arguments
+```
+`msg` is the Eris `Message` Object. See `Message` documentation above for available functionality.
+
+`args` is an Array of strings representing the passed parameters. This contains all of all words *following the command* `petkitty`, delimited by a space. If a message says `!petkitty a b c`, `args` will contain `['a', 'b', 'c']`. 
+
+## Getting Info From The Message
+Just a few examples:
+- `msg.channel` - get the Eris::Channel Object
+- `msg.channel.id` - get the channelID (useful for storing per-channel in redis)
+- `msg.guildID` - get the serverID
+- `msg.author.mention` - @Mentions the user who wrote the message
+- `msg.content` - body of the message
+
+If you want everything following the command to be one argument, you can do an `args.join(' ')`.
+
+If someone passes a Mention, you can get the user ID off of it with `args[0].replace(/<@!(.*?)>/, (match, id) => id)`. This helps when associating the SAME user with whatever nickname they have at the time
+
+Look through `command-map.js` for other examples.
+
+## Working With Redis
+Redis is a persisted in-memory data structure. It is great for when you're not storing anything particularly important or large (everything in this app) and is a lot smaller and easier to handle. In this app, it acts as a database. It can store strings, hashes, lists, sets, sorted sets with range queries, bitmaps, hyperloglogs, geospatial indexes with radius queries and streams. We use it for strings and hashes, and also probably lists.
+
+We use Async Redis (library) to communicate with Redis. 
+
+In `command-map.js`, we use RedisClient to interact with it.
+
+- `RedisClient.hset(<String> A, <String> B, <String> C): At hash named A, store key of B with value of C.`
+- `RedisClient.hget(<String> A, <String> B): At hash named A, get value of key B.`
