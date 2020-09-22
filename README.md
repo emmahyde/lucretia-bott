@@ -13,7 +13,9 @@ https://discord.com/developers/applications
 
 1. Click "New Application" and give your test bot a name. You will be taken to the General Information panel for that Application.
 
-1. Click OAuth2 in the sidebar. Under OAuth2 URL Generator > Scopes, click "bot" in the middle column.
+1. Go to "Bot" in the sidebar. Click "Add A Bot", and approve the application as a bot.
+
+1. Go to "OAuth2" in the sidebar. Under OAuth2 URL Generator > Scopes, click "bot" in the middle column.
 
 1. Give Lucretia the Permissions in the Bot Permissions panel she needs to function. For a test server and a test account, it's ok to give her administrator access, but for the record, here are the permissions used by Lucretia in "production":
 
