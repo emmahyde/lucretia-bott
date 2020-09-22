@@ -43,6 +43,8 @@ https://discord.com/developers/applications
 
   So that you are hardcoding the token you just copied from the Dev Portal instead of retrieving a token from AWS.
 
+**Don't ever push this change**. If you do by accident, regenerate your token for security purposes. 
+
 1. When you're prepared, you may type `node .` into your bash console at the root directory in order to launch the app in non-detatched local-dev mode. Congrats, your bot should now be online! You may debug and test with effervescence and beauty. 
 
 1. When making changes, please open a PR against `master` on a branch and send to / tag Emma Hyde for approval and merge.
