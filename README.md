@@ -63,7 +63,7 @@ https://discord.com/developers/applications
 	  # expected response if working: => PONG
 	```
 
-1. When you're prepared, you may `npm install` and `npm run watch` into your bash console at the root directory in order to launch the app in non-detatched local-dev mode. Congrats, your bot should now be online! You may debug and test with effervescence and beauty. 
+1. When you're prepared, you may `npm install` and `npm run watch` into your bash console at the root directory in order to launch the app in non-detatched local-dev mode. Congrats, your bot should now be online! You may debug and test with effervescence and beauty. Changes to the code will be automatically reloaded by nodemon, no need to start and stop the app (this is what `watch` is for). 
 
 1. Add any new commands to the `help` command in `command-map.js`. When making changes, please open a PR against `master` on a branch and send to / tag Emma Hyde for approval and merge.
 
