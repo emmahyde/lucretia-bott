@@ -17,6 +17,7 @@
     "start": "NODE_DEBUG=redis node ./node_modules/pm2/bin/pm2 start ./server.js --name lucretia-bott --log ../logs/app.log",
     "stop": "node ./node_modules/pm2/bin/pm2 stop lucretia-bott",
     "show": "node ./node_modules/pm2/bin/pm2 list",
+    "watch": "nodemon .",
     "build": "echo 'Building...'",
     "prettify": "prettier --config .prettierrc -c ./*.js"
   },
@@ -28,9 +29,13 @@
     "dotenv": "^8.2.0",
     "eris": "^0.13.3",
     "express": "^4.17.1",
+    "node-fetch": "^2.6.1",
     "node-schedule": "^1.3.2",
     "pm2": "^4.4.1",
     "prettier": "^2.1.1",
     "ramda": "^0.27.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
   }
 }
