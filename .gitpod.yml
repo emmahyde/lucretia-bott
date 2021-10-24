@@ -1,0 +1,9 @@
+
+vscode:
+  extensions:
+    - tabnine.tabnine-vscode
+    - dbaeumer.vscode-eslint
+    - christian-kohler.npm-intellisense
+    - hookyqr.beautify
+    - eg2.vscode-npm-script
+    - eamodio.gitlens
