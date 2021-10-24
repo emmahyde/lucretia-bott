@@ -1,7 +1,6 @@
 {
   "name": "lucretia-bott",
   "version": "1.0.0",
-  "type": "commonjs",
   "description": "the bot that was inside me all along.",
   "repository": {
     "type": "git",
