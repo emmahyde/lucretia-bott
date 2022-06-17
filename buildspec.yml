@@ -6,13 +6,19 @@ phases:
       # run 'npm install' using versions in package-lock.json
       - ln -s ./node_modules/pm2/bin/pm2 /usr/bin
       - ln -s ./node_modules/pm2/bin/pm2 /usr/local/bin
+
+### artifacts/files
+# Required sequence. Represents the locations that contain the build 
+# output artifacts in the build environment. Contains a sequence of 
+# scalars, with each scalar representing a separate location where 
+# CodeBuild can find build output artifacts, relative to the original 
+# build location or, if set, the base directory. Locations can include 
+# the following:
+# - A single file (for example, my-file.jar).
+# - A single file in a subdirectory (for example, my-subdirectory/my-file.jar or my-parent-subdirectory/my-subdirectory/my-file.jar).
+# - '**/*' represents all files recursively.
+# - my-subdirectory/* represents all files in a subdirectory named my-subdirectory.
+# - my-subdirectory/**/* represents all files recursively starting from a subdirectory named my-subdirectory.
 artifacts:
   files:
-    - buildspec.yml
-    - appspec.yml
-    - server.js
-    - package.json
-    - package-lock.json
-    - 'deploy/**/*'
-    - 'lib/**/*'
-    - 'node_modules/**/*'
+    - '**/*'

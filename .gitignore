@@ -10,3 +10,5 @@ redis.conf
 local-token.js
 .env
 lucretia-key-pair-2022.pem
+.history
+.vscode
