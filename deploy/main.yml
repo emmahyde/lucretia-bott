@@ -105,66 +105,44 @@ Resources:
       Monitoring: true
       SecurityGroupIds:
         - !GetAtt SecurityGroup.GroupId
-      KeyName: 'lucretia-bott-key-pair'
+      KeyName: 'lucretia-key-pair-2022'
       UserData:
         Fn::Base64: !Sub |
-          #!/bin/bash -xe
+            #!/bin/bash -xe
 
-          # send script output to /tmp so we can debug boot failures
-          exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
+            # send script output to /tmp so we can debug boot failures
+            exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
 
-          echo 'running yum update...'
-          yum -y update
-          yum install -y gcc make tcl aws-cfn-bootstrap
-
-          echo 'writing install script...'
-          cat > /tmp/install_script.sh << EOF
-            # START
-
-            echo "Setting up NodeJS Environment..."
-            curl https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-
-            # Dot source the files to ensure that variables are available within the current shell
-            . /home/ec2-user/.nvm/nvm.sh
-            . /home/ec2-user/.bashrc
-
-            # Install NVM, NPM, Node.JS
-            nvm install v16.15.1
-            nvm alias default 16
-            nvm use 16
+            echo 'running yum update...'
+            yum -y update
+            yum install -y gcc make tcl aws-cfn-bootstrap
 
             # Create log directory
             mkdir -p /home/ec2-user/app/logs
-            echo "environment setup complete. exiting install_script..."
-          EOF
+            
+            echo 'running cfn-init metadata file + package install...'
+            /opt/aws/bin/cfn-init -v --stack ${AWS::StackName} --region ${AWS::Region} --resource Instance
 
-          echo 'running install_script...'
-          chown ec2-user:ec2-user /tmp/install_script.sh && chmod a+x /tmp/install_script.sh
-          sleep 1; su - ec2-user -c "/tmp/install_script.sh"
+            echo 'installing redis...'
+            mkdir /etc/redis
+            mkdir -p /var/redis/6379
+            make -C /home/ec2-user/redis-stable/ distclean
+            make -C /home/ec2-user/redis-stable/
+            cp /home/ec2-user/redis-stable/utils/redis_init_script /etc/init.d/redis_6379
+            cp /home/ec2-user/redis-stable/src/redis-server /usr/local/bin
+            cp /home/ec2-user/redis-stable/src/redis-cli /usr/local/bin
 
-          echo 'running cfn-init metadata file + package install...'
-          /opt/aws/bin/cfn-init -v --stack ${AWS::StackName} --region ${AWS::Region} --resource Instance
+            echo 'downloading cloudwatch configs...'
+            echo 'directory: $(pwd)'
+            aws s3api get-object --bucket lucretia-bott-config --key amazon-cloudwatch-agent.json /home/ec2-user/agents/amazon-cloudwatch-agent.json
+            aws s3api get-object --bucket lucretia-bott-config --key redis.conf /etc/redis/6379.conf
+            chkconfig redis_6379 on
 
-          echo 'installing redis...'
-          mkdir /etc/redis
-          mkdir -p /var/redis/6379
-          make -C /home/ec2-user/redis-stable/ distclean
-          make -C /home/ec2-user/redis-stable/
-          cp /home/ec2-user/redis-stable/utils/redis_init_script /etc/init.d/redis_6379
-          cp /home/ec2-user/redis-stable/src/redis-server /usr/local/bin
-          cp /home/ec2-user/redis-stable/src/redis-cli /usr/local/bin
+            echo 'initializing cloudwatch...'
+            /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/home/ec2-user/agents/amazon-cloudwatch-agent.json -s
 
-          echo 'downloading cloudwatch configs...'
-          echo 'directory: $(pwd)'
-          aws s3api get-object --bucket lucretia-bott-config --key amazon-cloudwatch-agent.json /home/ec2-user/agents/amazon-cloudwatch-agent.json
-          aws s3api get-object --bucket lucretia-bott-config --key redis.conf /etc/redis/6379.conf
-          chkconfig redis_6379 on
-
-          echo 'initializing cloudwatch...'
-          /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/home/ec2-user/agents/amazon-cloudwatch-agent.json -s
-
-          echo 'signaling instance is ready...'
-          /opt/aws/bin/cfn-signal -e $? --stack ${AWS::StackName} --region ${AWS::Region} --resource Instance
+            echo 'signaling instance is ready...'
+            /opt/aws/bin/cfn-signal -e $? --stack ${AWS::StackName} --region ${AWS::Region} --resource Instance
       Tags:
         - Key: Name
           Value: !Ref AWS::StackName
@@ -194,7 +172,7 @@ Resources:
       Environment:
         Type: LINUX_CONTAINER
         ComputeType: BUILD_GENERAL1_SMALL
-        Image: aws/codebuild/standard:2.0
+        Image: aws/codebuild/standard:5.0
       Source:
         Type: CODEPIPELINE
   DeploymentApplication:
@@ -229,7 +207,7 @@ Resources:
               ActionTypeId:
                 Category: Source
                 Owner: ThirdParty
-                Version: 1
+                Version: '1'
                 Provider: GitHub
               OutputArtifacts:
                 - Name: Source
