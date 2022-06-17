@@ -4,16 +4,14 @@ phases:
   pre_build:
     commands:
       # run 'npm install' using versions in package-lock.json
-      - rm -rf ./node_modules/
-      - npm ci
-  build:
-    commands:
-      - npm rebuild
-  post_build:
-    commands:
       - ln -s ./node_modules/pm2/bin/pm2 /usr/bin
       - ln -s ./node_modules/pm2/bin/pm2 /usr/local/bin
-      - npm start
+  build:
+    commands:
+      - npm clean-install
+  post_build:
+    commands:
+      - npm run start
 artifacts:
   files:
     - buildspec.yml
