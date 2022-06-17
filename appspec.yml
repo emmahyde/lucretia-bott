@@ -15,9 +15,9 @@ hooks:
     # start the application
     - location: deploy/start-service.sh
       timeout: 20
-      # runas: ec2-user
+      runas: ec2-user
   ApplicationStop:
     # stop the application
     - location: deploy/stop-service.sh
       timeout: 20
-      # runas: ec2-user
+      runas: ec2-user
