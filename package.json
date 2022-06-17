@@ -35,7 +35,8 @@
     "pm2": "^4.4.1",
     "prettier": "^2.1.1",
     "ramda": "^0.27.1",
-    "theredoc": "^1.0.0"
+    "theredoc": "^1.0.0",
+    "ultimate-text-to-image": "^1.0.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.4"
