@@ -8,6 +8,8 @@ phases:
       - ln -s ./node_modules/pm2/bin/pm2 /usr/local/bin
   build:
     commands:
+      - nvm alias default 16
+      - nvm use 16
       - npm clean-install
   post_build:
     commands:
