@@ -1,5 +1,6 @@
 version: 0.2
 
+
 phases:
   pre_build:
     commands:
@@ -11,6 +12,7 @@ phases:
     commands:
       - npm rebuild
   post_build:
+    run-as: ec2-user
     commands:
       - npm start
 artifacts:
