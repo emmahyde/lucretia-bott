@@ -1,20 +1,21 @@
 version: 0.2
 
-
 phases:
   pre_build:
     commands:
       # run 'npm install' using versions in package-lock.json
       - rm -rf ./node_modules/
-      - npm install
-      - ln -s ./node_modules/pm2/bin/pm2 /usr/bin
+      - npm ci
   build:
     commands:
       - npm rebuild
   post_build:
     run-as: ec2-user
     commands:
+      - ln -s ./node_modules/pm2/bin/pm2 /usr/bin
+      - ln -s ./node_modules/pm2/bin/pm2 /usr/local/bin
       - npm start
+      - pm2 save
 artifacts:
   files:
     - buildspec.yml
