@@ -14,7 +14,6 @@ phases:
       - ln -s ./node_modules/pm2/bin/pm2 /usr/bin
       - ln -s ./node_modules/pm2/bin/pm2 /usr/local/bin
       - npm start
-      - pm2 save
 artifacts:
   files:
     - buildspec.yml
