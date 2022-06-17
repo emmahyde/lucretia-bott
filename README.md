@@ -119,3 +119,39 @@ In `command-map.js`, we use RedisClient to interact with it.
 
 - `RedisClient.hset(<String> A, <String> B, <String> C): At hash named A, store key of B with value of C.`
 - `RedisClient.hget(<String> A, <String> B): At hash named A, get value of key B.`
+
+# Deploying CloudFormation Changes
+
+The bash script that prepares the EC2 instance (installs node, etc.) is within the main.yml file.
+
+AWS will pick up any and all changes of the actual JavaScript codebase, but unfortunately the current
+configuration will not pickup changes to the CloudFormation templates. In order to push changes to these
+stacks (including upgrading node), you need to run the deploy-infra.sh script in this directory after some enviornmental configuration:
+
+1. With an AWS account configured locally (use the AWS cli tool to configure your profiles), run:
+	```
+	mkdir -p ~/.env; touch ~/.env/lucretia-bott-access-token ~/.env/cli-profile
+	```
+	This is a non-destructive way to ensure all are in existence.
+2. Enter each file and insert:
+  - `lucretia-bott-access-token`: a Personal Access Token (created @ https://github.com/settings/tokens)
+  that has `admin:repo_hook` and `repo` permissions. You will need a personal access token for an account that
+  has read + write access to the repository. 
+  - `cli-profile`: this is the name of an aws profile configured through the aws cli tool (look for
+  existing profiles at `~/.aws/config` & `~/.aws/credentials`) that has read + write access to the account
+  running lucretia-bott.
+3. Once your bash environment is set up, we can run the bash script `bash deploy-infra.sh`. It will print out
+the env variables it was able to derive from your environment. Note that if any of these are blank, something
+went wrong.
+4. If there are errors, the AWS cli tool will walk you through them. If it says it was unable to find either
+of the above created files, make sure they contain only one string with the needed key or profile name, and
+ensure they're in the correct location.
+
+You can watch the CloudFormation update occur at the CloudFormation/`lucretia-bott` and
+CloudFormation/`lucretia-bott-setup` stacks. This is where you can see each resource get constructed and is
+the likely location to find deploy resource failures.
+
+# Logging
+
+CloudWatch is running for the app and setup scripts. You can see the logging for either at the CloudWatch
+page.
