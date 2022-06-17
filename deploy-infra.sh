@@ -24,7 +24,7 @@ echo -e "GITHUB REPOSITORY:\t $GH_OWNER/$GH_REPO/$GH_BRANCH"
 echo -e "AWS ACCOUNT ID:\t\t $AWS_ACCOUNT_ID"
 echo -e "AWS PROFILE:\t\t $AWS_PROFILE"
 echo -e "AWS REGION:\t\t $REGION"
-echo -e "EC2 INSTANCE TYPE:\t $EC2_INSTANCE_mkdir -p ~/.env; touch ~/.env/lucretia-bott-access-token ~/.env/cli-profile ~/.env/poopTYPE"
+echo -e "EC2 INSTANCE TYPE:\t $EC2_INSTANCE_TYPE"
 echo -e "CODEPIPELINE BUCKET:\t $CODEPIPELINE_BUCKET"
 
 # Deploys static resources

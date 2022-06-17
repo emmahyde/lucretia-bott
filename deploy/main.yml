@@ -122,16 +122,16 @@ Resources:
             # START
 
             echo "Setting up NodeJS Environment..."
-            curl https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
+            curl https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
 
             # Dot source the files to ensure that variables are available within the current shell
             . /home/ec2-user/.nvm/nvm.sh
             . /home/ec2-user/.bashrc
 
             # Install NVM, NPM, Node.JS
-            nvm alias default v16.15.0
-            nvm install v16.15.0
-            nvm use v16.15.0
+            nvm alias default v12
+            nvm install v12
+            nvm use v12
 
             # Create log directory
             mkdir -p /home/ec2-user/app/logs
