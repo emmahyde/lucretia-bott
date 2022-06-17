@@ -6,21 +6,12 @@ phases:
       # run 'npm install' using versions in package-lock.json
       - ln -s ./node_modules/pm2/bin/pm2 /usr/bin
       - ln -s ./node_modules/pm2/bin/pm2 /usr/local/bin
-  build:
-    commands:
-      - nvm alias default 16
-      - nvm use 16
-      - npm clean-install
-  post_build:
-    commands:
-      - npm run start
 artifacts:
   files:
     - buildspec.yml
     - appspec.yml
     - server.js
     - package.json
-    - package-lock.json
     - 'deploy/**/*'
     - 'lib/**/*'
     - 'node_modules/**/*'
