@@ -20,6 +20,7 @@ artifacts:
     - appspec.yml
     - server.js
     - package.json
+    - package-lock.json
     - 'deploy/**/*'
     - 'lib/**/*'
     - 'node_modules/**/*'
