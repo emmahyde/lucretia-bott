@@ -1,9 +1,6 @@
 version: 0.2
 
 phases:
-  install:
-    runtime-versions:
-      nodejs: 10
   pre_build:
     commands:
       # run 'npm install' using versions in package-lock.json
@@ -14,7 +11,6 @@ phases:
     commands:
       - npm run build
   post_build:
-    run-as: ec2-user
     commands:
       - npm start
 artifacts:
