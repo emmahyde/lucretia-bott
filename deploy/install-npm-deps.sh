@@ -7,6 +7,7 @@ curl https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
 . /home/ec2-user/.bashrc
 
 echo "environment setup complete. exiting install_script..."
+cd /home/ec2-user/app/release
 # Install NVM, NPM, Node.JS
 nvm install v16.15.1
-npm install
+npm clean-install
