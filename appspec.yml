@@ -10,14 +10,6 @@ permissions:
     pattern: "**"
     owner: ec2-user
     group: ec2-user
-    type:
-      - directory
-    # change permissions from root to ec2-user
-  - object: /home/ec2-user/app/release
-    pattern: "**"
-    owner: ec2-user
-    group: ec2-user
-
 hooks:
   ApplicationStop:
     # stops the currently running instance of the application, if one exists
