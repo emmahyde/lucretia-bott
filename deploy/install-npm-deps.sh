@@ -9,4 +9,4 @@ curl https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
 echo "environment setup complete. exiting install_script..."
 # Install NVM, NPM, Node.JS
 nvm install v16.15.1
-npm clean-install
+npm install
